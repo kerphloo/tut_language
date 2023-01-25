@@ -8,13 +8,13 @@ const ID: &str = "abcdefghijklmnopqrstuvwxyz";
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum State {
   Searching,
-	FoundId,
-	FoundInteger,
+  FoundId,
+  FoundInteger,
   FoundOperator,
 }
 
 impl State {
-	  pub fn new(string: &str) -> Self {
+  pub fn new(string: &str) -> Self {
     if ["", " ", "\n", "\r"].contains(&string) {
       return Self::Searching;
     }
@@ -38,28 +38,27 @@ pub struct Tokenizer {
 impl Tokenizer {
   pub fn new() -> Self {
     return Self {
-      state: State::Searching
+      state: State::Searching,
     };
   }
   pub fn scan(&mut self, source: String, tokens: &mut Vec<Token>) {
     let mut buffer = Vec::new(); // empty vector
 
-    for character in source.split("") { // split at every character
+    // split at every character
+    for character in source.split("") {
       // get the type of the current character
       let character_type = State::new(character);
 
       // 1. character type/state mismatch
       if character_type != self.state {
-        if buffer.len() != 0 { // if buffer not empty
+        // if buffer not empty
+        if buffer.len() != 0 {
           tokens.push(Token::new(
             match self.state {
               State::FoundId => TokenType::Id,
               State::FoundInteger => TokenType::Integer,
               State::FoundOperator => TokenType::Operator,
-              _ => panic!(
-                "can’t push a token of type {:?}",
-                self.state,
-              ),
+              _ => panic!("can't push a token of type {:?}", self.state,),
             },
             buffer.join(""), // join buffer into one string
           ));
@@ -77,9 +76,10 @@ impl Tokenizer {
       // 3. scanner state matches Searching
       if self.state == State::Searching {
         self.state = character_type;
-      } if self.state != State::Searching {
+      }
+      if self.state != State::Searching {
         buffer.push(character);
-      }      
+      }
     }
-  } 
+  }
 }

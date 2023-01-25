@@ -1,8 +1,8 @@
-mod tokenizer;
 mod instruction;
+mod tokenizer;
 
-use tokenizer::Tokenizer;
 use instruction::{evaluate, Instruction};
+use tokenizer::Tokenizer;
 
 // i/o imports
 use std::env;
@@ -16,12 +16,12 @@ fn main() {
   Tokenizer::new().scan(
     // read that file as a string
     read_to_string(path).unwrap(),
-	    tokens
+    tokens,
   );
 
   let mut instructions = Vec::new();
   for token in tokens {
-	    instructions.push(Instruction::new(token))
+    instructions.push(Instruction::new(token))
   }
 
   evaluate(instructions);
